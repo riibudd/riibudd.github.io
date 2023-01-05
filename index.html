@@ -154,21 +154,29 @@
         </div>
         <div class="row justify-content-center">
           <div class="col-md-6">
-            <form action="">
+            <div class="alert alert-success alert-dismissible fade show d-none my-alert1" role="alert">
+              Thank you for your <strong>Message</strong> we have received
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form action="" name="portofolio-contact-form">
               <div class="mb-3">
                 <label for="name" class="form-label">Name</label>
-                <input type="name" class="form-control" id="name" aria-describedby="name" />
+                <input type="name" class="form-control" id="name" name="name" aria-describedby="name" />
               </div>
               <div class="mb-3">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" aria-describedby="email" />
+                <input type="email" class="form-control" id="email" name="email" aria-describedby="email" />
               </div>
 
               <div class="mb-3">
                 <label for="pesan" class="form-label">Message</label>
-                <textarea class="form-control" id="pesan" rows="3"></textarea>
+                <textarea class="form-control" id="pesan" name="message" rows="3"></textarea>
               </div>
-              <button type="submit" class="btn btn-primary">Send</button>
+              <button type="submit" class="btn btn-primary btn-kirim">Send</button>
+              <button class="btn btn-primary btn-loading d-none" type="button" disabled>
+                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                Sabar Gan...
+              </button>
             </form>
           </div>
         </div>
@@ -190,5 +198,34 @@
     </footer>
     <!-- END FOOTER -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!-- jamiewilson Script -->
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbx2Q--82u0rRTJPMr-xMk8CsZYm7wflHn7piRX-6wS9Bib2qDnerkX9gGMZ3aOLT8H1/exec';
+      const form = document.forms['portofolio-contact-form'];
+      const btnKirim = document.querySelector('.btn-kirim');
+      const btnLoading = document.querySelector('.btn-loading');
+      const myAlert1 = document.querySelector('.my-alert1');
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // ketika tombol submit di click
+        // tampilkan tombol loading , hilangkan tombol kirim
+        btnLoading.classList.toggle('d-none');
+        btnKirim.classList.toggle('d-none');
+        fetch(scriptURL, { method: 'POST', body: new FormData(form) })
+          .then((response) => {
+            // tampilkan tombol kirim, hilangkan tombol loading
+            btnLoading.classList.toggle('d-none');
+            btnKirim.classList.toggle('d-none');
+            // tampilkan alert!
+            myAlert1.classList.toggle('d-none');
+            // reset formnya
+            form.reset();
+            console.log('Success!', response);
+          })
+          .catch((error) => console.error('Error!', error.message));
+      });
+    </script>
   </body>
 </html>
